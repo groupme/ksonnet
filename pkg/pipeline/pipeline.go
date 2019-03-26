@@ -33,6 +33,7 @@ import (
 	clustermetadata "github.com/ksonnet/ksonnet/pkg/metadata"
 	"github.com/ksonnet/ksonnet/pkg/params"
 	"github.com/ksonnet/ksonnet/pkg/util/jsonnet"
+	"github.com/ksonnet/ksonnet/pkg/util/jsonnet/scope"
 	"github.com/ksonnet/ksonnet/pkg/util/k8s"
 	"github.com/ksonnet/ksonnet/pkg/util/strings"
 	"github.com/pkg/errors"
@@ -110,7 +111,7 @@ func (p *Pipeline) EnvParameters(moduleName string, inherited bool) (string, err
 		return "", errors.Wrapf(err, "load environment %s", p.envName)
 	}
 
-	vm := jsonnet.NewVM()
+	vm := scope.Apply(jsonnet.NewVM())
 	vm.AddJPath(
 		env.MakePath(p.app.Root()),
 		filepath.Join(p.app.Root(), "lib"),

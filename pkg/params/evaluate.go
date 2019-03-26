@@ -65,7 +65,7 @@ func modularizeParameters(a app.App, envName, moduleName, paramsStr string) (str
 		return "", errors.Wrap(err, "generating environments object")
 	}
 
-	vm := jsonnet.NewVM()
+	vm := scope.Apply(jsonnet.NewVM())
 	vm.ExtCode("__ksonnet/environments", envCode)
 	vm.TLAVar("moduleName", moduleName)
 	vm.TLACode("params", paramsStr)

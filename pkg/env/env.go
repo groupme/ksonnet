@@ -356,3 +356,14 @@ func revendorPackages(a app.App, pm registry.PackageManager, e *app.EnvironmentC
 	}
 	return tmpDir, callerCleanFunc, nil
 }
+
+func PrepareVM(vm *jsonnet.VM) *jsonnet.VM {
+	for k, v := range componentExtVars {
+		vm.ExtVar(k, v)
+	}
+
+	for k, v := range componentTlaVars {
+		vm.TLAVar(k, v)
+	}
+	return vm
+}

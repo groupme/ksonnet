@@ -19,11 +19,12 @@ import (
 	"regexp"
 
 	"github.com/ksonnet/ksonnet/pkg/util/jsonnet"
+	"github.com/ksonnet/ksonnet/pkg/util/jsonnet/scope"
 	"github.com/sirupsen/logrus"
 )
 
 func applyGlobals(params string) (string, error) {
-	vm := jsonnet.NewVM()
+	vm := scope.Apply(jsonnet.NewVM())
 
 	vm.ExtCode("params", params)
 	return vm.EvaluateSnippet("applyGlobals", snippetMapGlobal)

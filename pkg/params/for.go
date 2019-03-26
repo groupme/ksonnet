@@ -17,6 +17,7 @@ package params
 
 import (
 	"github.com/ksonnet/ksonnet/pkg/util/jsonnet"
+	"github.com/ksonnet/ksonnet/pkg/util/jsonnet/scope"
 	"github.com/pkg/errors"
 )
 
@@ -45,7 +46,7 @@ func BuildEnvParamsForModule(moduleName, paramsStr, componentParams, envDir stri
 		return "", errors.Wrap(err, "loading script")
 	}
 
-	vm := jsonnet.NewVM()
+	vm := scope.Apply(jsonnet.NewVM())
 	vm.TLAVar("moduleName", moduleName)
 	vm.TLACode("input", paramsStr)
 	vm.ExtCode("__ksonnet/params", componentParams)

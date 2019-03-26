@@ -19,6 +19,7 @@ import (
 	"strings"
 
 	"github.com/ksonnet/ksonnet/pkg/env"
+	"github.com/ksonnet/ksonnet/pkg/util/jsonnet/scope"
 	"github.com/pkg/errors"
 	"github.com/spf13/afero"
 	"github.com/spf13/cobra"
@@ -54,6 +55,8 @@ func extractJsonnetFlags(fs afero.Fs, name string) error {
 		}
 
 		env.AddExtVar(k, v)
+
+		scope.AddExtVar(k, v)
 	}
 
 	extVarFiles := viper.GetStringSlice(name + "-ext-var-file")
@@ -64,6 +67,9 @@ func extractJsonnetFlags(fs afero.Fs, name string) error {
 		}
 
 		if err = env.AddExtVarFile(fs, k, v); err != nil {
+			return errors.Wrap(err, "add ext var file")
+		}
+		if err = scope.AddExtVarFile(fs, k, v); err != nil {
 			return errors.Wrap(err, "add ext var file")
 		}
 	}
